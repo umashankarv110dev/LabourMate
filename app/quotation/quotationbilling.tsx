@@ -34,7 +34,7 @@ export default function DashboardScreen() {
       subtitle: "Manage your company profile",
       icon: "business-outline",
       color: "#00A86B",
-      route: "/settings/companysettings",
+      route: "/settings/company",
     },
   ];
 

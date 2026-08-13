@@ -332,310 +332,394 @@ export default function HistoryScreen() {
   /* ================================================= */
 
   return (
+  <View style={styles.container}>
 
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      
-      <ScrollView showsVerticalScrollIndicator={false}>
-        
-      {/* ================================================= */}
-      {/* HEADER */}
-      {/* ================================================= */}
-    
-        <LinearGradient
-          colors={["#2563EB", "#3B82F6", "#60A5FA"]}
-          style={styles.header}
-        >
-          <View
-            style={styles.headerTop}
-          >
-          <View
-            style={styles.headerIcon}
-          >
-            <Ionicons
-              name="folder-open-outline"
-              size={28}
-              color="#FFFFFF"
-            />
-          </View>
+    <StatusBar barStyle="light-content" />
 
-          <View
-            style={styles.headerContent}
-          >
-            <Text
-              style={
-                styles.headerEyebrow
-              }
-            >
-              DOCUMENT MANAGEMENT
-            </Text>
 
-            <Text
-              style={styles.headerTitle}
-            >
-              History
-            </Text>
+    {/* ================================================= */}
+    {/* MAIN LIST */}
+    {/* ================================================= */}
 
-            <Text
-              style={
-                styles.headerSubtitle
-              }
-            >
-              Manage your quotations
-              and bills
-            </Text>
-          </View>
-        </View>
+    <FlatList
+      data={filtered}
 
-        {/* ================================================= */}
-        {/* STATS */}
-        {/* ================================================= */}
+      keyExtractor={(item) =>
+        item.id
+      }
 
-        <View
-          style={styles.statsContainer}
-        >
-          <View
-            style={styles.statItem}
-          >
-            <View
-              style={styles.statIcon}
-            >
-              <Ionicons
-                name="documents-outline"
-                size={18}
-                color="#FFFFFF"
-              />
-            </View>
+      renderItem={renderItem}
 
-            <View>
-              <Text
-                style={
-                  styles.statNumber
-                }
-              >
-                {totalDocuments}
-              </Text>
+      showsVerticalScrollIndicator={false}
 
-              <Text
-                style={
-                  styles.statLabel
-                }
-              >
-                Total
-              </Text>
-            </View>
-          </View>
+      keyboardShouldPersistTaps="handled"
 
-          <View
-            style={styles.statDivider}
-          />
-
-          <View
-            style={styles.statItem}
-          >
-            <View
-              style={[
-                styles.statIcon,
-                styles.draftIcon,
-              ]}
-            >
-              <Ionicons
-                name="create-outline"
-                size={18}
-                color="#FFFFFF"
-              />
-            </View>
-
-            <View>
-              <Text
-                style={
-                  styles.statNumber
-                }
-              >
-                {draftDocuments}
-              </Text>
-
-              <Text
-                style={
-                  styles.statLabel
-                }
-              >
-                Draft
-              </Text>
-            </View>
-          </View>
-
-          <View
-            style={styles.statDivider}
-          />
-
-          <View
-            style={styles.statItem}
-          >
-            <View
-              style={[
-                styles.statIcon,
-                styles.savedIcon,
-              ]}
-            >
-              <Ionicons
-                name="checkmark-circle-outline"
-                size={18}
-                color="#FFFFFF"
-              />
-            </View>
-
-            <View>
-              <Text
-                style={
-                  styles.statNumber
-                }
-              >
-                {savedDocuments}
-              </Text>
-
-              <Text
-                style={
-                  styles.statLabel
-                }
-              >
-                Saved
-              </Text>
-            </View>
-          </View>
-        </View>
-
-      </LinearGradient>
-
-      {/* ================================================= */}
-      {/* SEARCH */}
-      {/* ================================================= */}
-
-      <View
-        style={styles.searchContainer}
-      >
-        <View
-          style={styles.searchHeader}
-        >
-          <View>
-            <Text
-              style={
-                styles.sectionTitle
-              }
-            >
-              Your Documents
-            </Text>
-
-            <Text
-              style={
-                styles.sectionSubtitle
-              }
-            >
-              {filtered.length} document
-              {filtered.length !== 1
-                ? "s"
-                : ""}
-            </Text>
-          </View>
-
-          {search.length > 0 && (
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() =>
-                setSearch("")
-              }
-              style={
-                styles.clearSearch
-              }
-            >
-              <Ionicons
-                name="close"
-                size={18}
-                color={
-                  Colors.textSecondary
-                }
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <SearchBar
-          value={search}
-          onChange={setSearch}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor={Colors.primary}
         />
-      </View>
+      }
 
-      {/* ================================================= */}
-      {/* LIST */}
-      {/* ================================================= */}
 
-      <FlatList
-        data={filtered}
-        keyExtractor={(item) =>
-          item.id
-        }
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={
-          false
-        }
-        contentContainerStyle={[
-          styles.listContent,
-          {
-            paddingBottom:
-              105 + insets.bottom,
-          },
-        ]}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor={
-              Colors.primary
+      /* ================================================= */
+      /* HEADER CONTENT */
+      /* ================================================= */
+
+      ListHeaderComponent={
+        <View>
+          {/* ============================================= */}
+          {/* GRADIENT HEADER */}
+          {/* ============================================= */}
+
+          <LinearGradient
+            colors={[ "#2563EB", "#3B82F6", "#60A5FA",]}
+            style={styles.header}>
+
+            <View style={styles.headerTop} >
+              {/* HEADER ICON */}
+              <View style={styles.headerIcon}>
+                <Ionicons
+                  name="folder-open-outline"
+                  size={28}
+                  color="#FFFFFF"
+                />
+              </View>
+
+
+              {/* HEADER TEXT */}
+
+              <View
+                style={styles.headerContent}
+              >
+
+                <Text
+                  style={styles.headerEyebrow}
+                >
+                  DOCUMENT MANAGEMENT
+                </Text>
+
+
+                <Text
+                  style={styles.headerTitle}
+                >
+                  History
+                </Text>
+
+
+                <Text
+                  style={
+                    styles.headerSubtitle
+                  }
+                >
+                  Manage your quotations
+                  and bills
+                </Text>
+
+              </View>
+
+            </View>
+
+
+            {/* =========================================== */}
+            {/* STATS */}
+            {/* =========================================== */}
+
+            <View
+              style={
+                styles.statsContainer
+              }
+            >
+
+              {/* TOTAL */}
+
+              <View
+                style={styles.statItem}
+              >
+
+                <View
+                  style={styles.statIcon}
+                >
+                  <Ionicons
+                    name="documents-outline"
+                    size={18}
+                    color="#FFFFFF"
+                  />
+                </View>
+
+
+                <View>
+
+                  <Text
+                    style={
+                      styles.statNumber
+                    }
+                  >
+                    {totalDocuments}
+                  </Text>
+
+                  <Text
+                    style={
+                      styles.statLabel
+                    }
+                  >
+                    Total
+                  </Text>
+
+                </View>
+
+              </View>
+
+
+              <View
+                style={styles.statDivider}
+              />
+
+
+              {/* DRAFT */}
+
+              <View
+                style={styles.statItem}
+              >
+
+                <View
+                  style={[
+                    styles.statIcon,
+                    styles.draftIcon,
+                  ]}
+                >
+                  <Ionicons
+                    name="create-outline"
+                    size={18}
+                    color="#FFFFFF"
+                  />
+                </View>
+
+
+                <View>
+
+                  <Text
+                    style={
+                      styles.statNumber
+                    }
+                  >
+                    {draftDocuments}
+                  </Text>
+
+                  <Text
+                    style={
+                      styles.statLabel
+                    }
+                  >
+                    Draft
+                  </Text>
+
+                </View>
+
+              </View>
+
+
+              <View
+                style={styles.statDivider}
+              />
+
+
+              {/* SAVED */}
+
+              <View
+                style={styles.statItem}
+              >
+
+                <View
+                  style={[
+                    styles.statIcon,
+                    styles.savedIcon,
+                  ]}
+                >
+                  <Ionicons
+                    name="checkmark-circle-outline"
+                    size={18}
+                    color="#FFFFFF"
+                  />
+                </View>
+
+
+                <View>
+
+                  <Text
+                    style={
+                      styles.statNumber
+                    }
+                  >
+                    {savedDocuments}
+                  </Text>
+
+                  <Text
+                    style={
+                      styles.statLabel
+                    }
+                  >
+                    Saved
+                  </Text>
+
+                </View>
+
+              </View>
+
+            </View>
+
+          </LinearGradient>
+
+
+          {/* ============================================= */}
+          {/* SEARCH SECTION */}
+          {/* ============================================= */}
+
+          <View
+            style={
+              styles.searchContainer
             }
-          />
-        }
-        ListEmptyComponent={
-          renderEmpty
-        }
+          >
+
+            <View
+              style={
+                styles.searchHeader
+              }
+            >
+
+              <View>
+
+                <Text
+                  style={
+                    styles.sectionTitle
+                  }
+                >
+                  Your Documents
+                </Text>
+
+
+                <Text
+                  style={
+                    styles.sectionSubtitle
+                  }
+                >
+                  {filtered.length} document
+                  {filtered.length !== 1
+                    ? "s"
+                    : ""}
+                </Text>
+
+              </View>
+
+
+              {/* CLEAR SEARCH */}
+
+              {search.length > 0 && (
+
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() =>
+                    setSearch("")
+                  }
+                  style={
+                    styles.clearSearch
+                  }
+                >
+
+                  <Ionicons
+                    name="close"
+                    size={18}
+                    color={
+                      Colors.textSecondary
+                    }
+                  />
+
+                </TouchableOpacity>
+
+              )}
+
+            </View>
+
+
+            {/* SEARCH BAR */}
+
+            <SearchBar
+              value={search}
+              onChange={setSearch}
+            />
+
+          </View>
+
+        </View>
+      }
+
+
+      /* ================================================= */
+      /* EMPTY STATE */
+      /* ================================================= */
+
+      ListEmptyComponent={
+        renderEmpty
+      }
+
+
+      /* ================================================= */
+      /* LIST PADDING */
+      /* ================================================= */
+
+      contentContainerStyle={[
+        styles.listContent,
+        {
+          paddingBottom:
+            105 + insets.bottom,
+        },
+      ]}
+
+    />
+
+
+    {/* ================================================= */}
+    {/* FLOATING ACTION BUTTON */}
+    {/* ================================================= */}
+
+    <TouchableOpacity
+      activeOpacity={0.85}
+
+      style={[
+        styles.fab,
+        {
+          bottom:
+            Math.max(
+              insets.bottom + 18,
+              22
+            ),
+        },
+      ]}
+
+      onPress={() =>
+        router.push(
+          "/quotation/create"
+        )
+      }
+    >
+
+      <Ionicons
+        name="add"
+        size={30}
+        color="#FFFFFF"
       />
 
-      {/* ================================================= */}
-      {/* FLOATING ACTION BUTTON */}
-      {/* ================================================= */}
-
-      <TouchableOpacity
-        activeOpacity={0.85}
-        style={[
-          styles.fab,
-          {
-            bottom:
-              Math.max(
-                insets.bottom + 18,
-                22
-              ),
-          },
-        ]}
-        onPress={() =>
-          router.push(
-            "/quotation/create"
-          )
-        }
+      <Text
+        style={styles.fabText}
       >
-        <Ionicons
-          name="add"
-          size={30}
-          color="#FFFFFF"
-        />
+        New
+      </Text>
 
-        <Text
-          style={styles.fabText}
-        >
-          New
-        </Text>
-      </TouchableOpacity>
-      </ScrollView>
-    </View>
-  );
+    </TouchableOpacity>
+
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
@@ -652,7 +736,7 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 50,
     paddingHorizontal: 22,
-    paddingBottom: 30,
+    paddingBottom: 34,
     borderBottomLeftRadius: 35,
     borderBottomRightRadius: 35,
   },
@@ -682,6 +766,7 @@ const styles = StyleSheet.create({
 
   headerContent: {
     flex: 1,
+    justifyContent: "center",
   },
 
   headerEyebrow: {
@@ -783,7 +868,6 @@ const styles = StyleSheet.create({
   /* ================================================= */
 
   searchContainer: {
-    marginHorizontal: 18,
     marginTop: 18,
   },
 

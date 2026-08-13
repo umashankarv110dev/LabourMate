@@ -23,13 +23,9 @@ export default function SectionHeader({
 const styles = StyleSheet.create({
   title: {
     fontSize: 18,
-
     fontWeight: "700",
-
     color: Colors.black,
-
     marginTop: 20,
-
     marginBottom: 10,
   },
 });

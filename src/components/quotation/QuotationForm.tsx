@@ -30,18 +30,13 @@ import SearchModal, {
 
 import { Colors } from "@/src/constants/colors";
 
-import { Company } from "../../types/companybill";
+import { Company } from "../../types/company";
 import { Item } from "../../types/item";
 import { Customer } from "../../types/customer";
 import {
   getCustomers,
   addCustomer,
 } from "../../services/customerStorage";
-
-import {
-  getData,
-  StorageKeys,
-} from "../../services/storage";
 
 import {
   calculateGrandTotal,
@@ -56,6 +51,8 @@ import {
   getTodayDate,
 } from "../../utils/date";
 
+import { useCompany } from "@/src/contexts/CompanyContext";
+
 import { Quotation } from "@/src/types/quotation";
 
 interface Props {
@@ -68,6 +65,8 @@ export default function QuotationForm({
   quotation,
 }: Props) {
   const insets = useSafeAreaInsets();
+
+  const { company: savedCompany } = useCompany();
 
   const defaultItem: Item = {
     id: Date.now().toString(),
@@ -125,7 +124,10 @@ export default function QuotationForm({
   });
 
   useEffect(() => {
-    loadCompany();
+    // --------------------------------------------------
+    // EDIT MODE
+    // Existing quotation company should remain unchanged
+    // --------------------------------------------------
 
     if (mode === "edit" && quotation) {
       setForm({
@@ -138,36 +140,49 @@ export default function QuotationForm({
         notes: quotation.notes,
       });
 
-      setItems(quotation.items);
+      setItems(
+        Array.isArray(quotation.items)
+          ? quotation.items
+          : [defaultItem]
+      );
 
-      setCompany(quotation.company);
-
-      if (
-        quotation.quotationNo?.startsWith("BILL")
-      ) {
-        setDocumentType("Bill");
+      // Keep the company information stored
+      // inside the existing quotation.
+      if (quotation.company) {
+        setCompany(quotation.company);
       }
     }
 
     loadCustomerList();
   }, []);
+  useEffect(() => {
+    // --------------------------------------------------
+    // CREATE MODE
+    // Use latest Company Profile from SQLite/Context
+    // --------------------------------------------------
 
-  const loadCompany = async () => {
-    try {
-      const data = await getData(
-        StorageKeys.COMPANY
-      );
-
-      if (data) {
-        setCompany(data);
-      }
-    } catch (error) {
-      console.log(
-        "Load Company Error:",
-        error
-      );
+    if (mode === "create" && savedCompany) {
+      setCompany(savedCompany);
     }
-  };
+  }, [mode, savedCompany]);
+
+
+  // const loadCompany = async () => {
+  //   try {
+  //     const data = await getData(
+  //       StorageKeys.COMPANY
+  //     );
+
+  //     if (data) {
+  //       setCompany(data);
+  //     }
+  //   } catch (error) {
+  //     console.log(
+  //       "Load Company Error:",
+  //       error
+  //     );
+  //   }
+  // };
 
   const loadCustomerList = async () => {
     try {
@@ -497,7 +512,7 @@ export default function QuotationForm({
                   }
                   numberOfLines={1}
                 >
-                  {company?.companyName ||
+                  {company?.owner_name ||
                     "Company not configured"}
                 </Text>
 
@@ -506,7 +521,7 @@ export default function QuotationForm({
                     styles.companyMobile
                   }
                 >
-                  {company?.mobile ||
+                  {company?.phone ||
                     "Add company mobile number"}
                 </Text>
               </View>
@@ -1127,17 +1142,6 @@ export default function QuotationForm({
             </ScrollView>
 
             </View>
-
-
-    // <SafeAreaView
-    //   style={styles.safeArea}
-    //   edges={[
-    //     "top",
-    //     "left",
-    //     "right",
-    //   ]}
-    // >
-    // </SafeAreaView>
   );
 }
 

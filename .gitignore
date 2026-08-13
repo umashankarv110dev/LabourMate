@@ -42,9 +42,5 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 
-# Generated native folders
-/ios
-/android
-
 # Local / example files
 app-example/

@@ -1,6 +1,5 @@
 import { SQLiteDatabase } from "expo-sqlite";
-
-const DATABASE_VERSION = 3;
+const DATABASE_VERSION = 5;
 
 export async function migrateDatabase(
   db: SQLiteDatabase
@@ -54,6 +53,16 @@ export async function migrateDatabase(
         PRAGMA user_version = 3;
       `);
     } 
+
+    if (currentVersion < 4) {
+      console.log("RUNNING MIGRATION V4");
+
+      await migrateToVersion4(db);
+
+      await db.execAsync(`
+        PRAGMA user_version = 4;
+      `);
+    }
 
     console.log(
       "DATABASE MIGRATION COMPLETED"
@@ -255,6 +264,44 @@ async function migrateToVersion3(
     CREATE INDEX IF NOT EXISTS idx_payment_entries_date
     ON payment_entries(payment_date);
   `);
+}
+
+async function migrateToVersion4(
+  db: SQLiteDatabase
+) {
+  console.log("ADDING COMPANY PROFILE FIELDS");
+
+  await addColumnIfNotExists(
+    db,
+    "companies",
+    "email",
+    "TEXT"
+  );
+
+  await addColumnIfNotExists(
+    db,
+    "companies",
+    "gst_number",
+    "TEXT"
+  );
+
+  await addColumnIfNotExists(
+    db,
+    "companies",
+    "signature",
+    "TEXT"
+  );
+
+  await addColumnIfNotExists(
+    db,
+    "companies",
+    "stamp",
+    "TEXT"
+  );
+
+  console.log(
+    "COMPANY PROFILE FIELDS ADDED"
+  );
 }
 
 async function createIndexes(

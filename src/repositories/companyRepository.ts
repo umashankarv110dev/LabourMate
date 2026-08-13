@@ -12,10 +12,10 @@ export async function getCompany(
 ): Promise<Company | null> {
   return db.getFirstAsync<Company>(
     `
-    SELECT *
-    FROM companies
-    WHERE id = ?
-    LIMIT 1
+      SELECT *
+      FROM companies
+      WHERE id = ?
+      LIMIT 1
     `,
     COMPANY_ID
   );
@@ -32,45 +32,61 @@ export async function saveCompany(
   if (existingCompany) {
     await db.runAsync(
       `
-      UPDATE companies
-      SET
-        name = ?,
-        owner_name = ?,
-        phone = ?,
-        address = ?,
-        logo = ?,
-        updated_at = ?
-      WHERE id = ?
+        UPDATE companies
+        SET
+          name = ?,
+          owner_name = ?,
+          phone = ?,
+          email = ?,
+          address = ?,
+          gst_number = ?,
+          logo = ?,
+          signature = ?,
+          stamp = ?,
+          updated_at = ?
+        WHERE id = ?
       `,
       input.name.trim(),
       input.owner_name?.trim() || null,
       input.phone?.trim() || null,
+      input.email?.trim() || null,
       input.address?.trim() || null,
+      input.gst_number?.trim().toUpperCase() || null,
       input.logo ?? null,
+      input.signature ?? null,
+      input.stamp ?? null,
       now,
       COMPANY_ID
     );
   } else {
     await db.runAsync(
       `
-      INSERT INTO companies (
-        id,
-        name,
-        owner_name,
-        phone,
-        address,
-        logo,
-        created_at,
-        updated_at
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO companies (
+          id,
+          name,
+          owner_name,
+          phone,
+          email,
+          address,
+          gst_number,
+          logo,
+          signature,
+          stamp,
+          created_at,
+          updated_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       COMPANY_ID,
       input.name.trim(),
       input.owner_name?.trim() || null,
       input.phone?.trim() || null,
+      input.email?.trim() || null,
       input.address?.trim() || null,
+      input.gst_number?.trim().toUpperCase() || null,
       input.logo ?? null,
+      input.signature ?? null,
+      input.stamp ?? null,
       now,
       now
     );
