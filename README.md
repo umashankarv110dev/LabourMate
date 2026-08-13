@@ -35,11 +35,6 @@ mobile platform.
 ### Workers
 ![Workers](screenshots/screenshots1.png)
 
-### Attendance
-![Attendance](screenshots/attendance.jpg)
-
-### Payments
-![Payments](screenshots/payments.jpg)
 
 ## Key Highlights
 - Business-focused mobile workflow
