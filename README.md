@@ -30,10 +30,10 @@ mobile platform.
 ## Screenshots
 
 ### Dashboard
-![Dashboard](screenshots/dashboard.jpg)
+![Dashboard](screenshots/screenshots.png)
 
 ### Workers
-![Workers](screenshots/workers.jpg)
+![Workers](screenshots/screenshots1.png)
 
 ### Attendance
 ![Attendance](screenshots/attendance.jpg)
